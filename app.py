@@ -1,26 +1,27 @@
 from flask import Flask, request, render_template
 from pycaret.anomaly import load_model, predict_model
+from joblib import load
 import pandas as pd
 import zipfile
 import os
 
 
-zip_file_path = 'anomaly_detection_model.zip'
-extracted_dir_path = 'anomaly_detection_model'
+# zip_file_path = 'anomaly_detection_model.zip'
+# extracted_dir_path = 'anomaly_detection_model'
 
-# Unzip the model file
-with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-    zip_ref.extractall(extracted_dir_path)
+# # Unzip the model file
+# with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+#     zip_ref.extractall(extracted_dir_path)
 
-# Load the unzipped model
-model_path = os.path.join(extracted_dir_path, 'anomaly_detection_model')
+# # Load the unzipped model
+# model_path = os.path.join(extracted_dir_path, 'anomaly_detection_model')
 
 
 # Initialize Flask app
 app = Flask(__name__)
 
 # Load the trained model
-model = load_model(model_path)
+model = load_model('anomaly_detection_model')
 
 # Define the home route
 @app.route('/')
@@ -36,9 +37,7 @@ def predict():
         'FISCAL_MTH': request.form.get('fiscal_month'),
         'DEPT_NAME': request.form.get('dept_name'),
         'DIV_NAME': request.form.get('div_name'),
-        'MERCHANT': request.form.get('merchant'),
         'CAT_DESC': request.form.get('cat_desc'),
-        'TRANS_DT': request.form.get('trans_dt'),
         'AMT': request.form.get('amt')
     }
     
@@ -71,4 +70,5 @@ def predict():
 
 # Run the app
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  # Default to 5000 if PORT is not set
+    app.run(host='0.0.0.0', port=port, debug=True)
