@@ -7,3 +7,4 @@ matplotlib==3.7.1
 scipy==1.10.1
 joblib==1.2.0
 gunicorn
+Werkzeug==2.1.2
