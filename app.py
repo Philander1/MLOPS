@@ -21,7 +21,7 @@ import os
 app = Flask(__name__)
 
 # Load the trained model
-model = load_model('anomaly_detection_model')
+model = load_model('models/anomaly_detection_model')
 
 # Define the home route
 @app.route('/')
